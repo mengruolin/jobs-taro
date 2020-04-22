@@ -1,0 +1,106 @@
+._layout {
+  position: relative;
+  box-sizing: border-box;
+  padding: 20px 30px;
+  padding-bottom: 220px;
+  .jobInfo {
+    padding-bottom: 60px;
+    .jobTitle {
+      font-size: 44px;
+      font-weight: 800;
+    }
+    .jobRequire {
+      position: relative;
+      top: 20px;
+      font-size: 30px;
+      line-height: 50px;
+      height: 50px;
+      color: #303030;
+      .jobWages {
+        position: absolute;
+        right: 20px;
+        font-size: 44px;
+        font-weight: 500;
+        color: #000000;
+      }
+    }
+    .jobTags {
+      margin-top: 20px;
+      padding: 20px 0;
+    }
+    .jobDescribe {
+      position: relative;
+      top: 30px;
+      .jobDescribeTitle {
+        font-size: 33px;
+        font-weight: 800;
+      }
+      .jobDescribeContent {
+        display: block;
+        margin-top: 10px;
+        line-height: 45px;
+      }
+    }
+  }
+  .publishInof {
+    .publishr {
+      display: flex;
+      
+    }
+  }
+  .companyInfo {
+    position: relative;
+    top: 20px;
+    height: 200px;
+    border-top: #303030 solid 1px;
+    border-bottom: #303030 solid 1px;
+    display: flex;
+    align-items: center;
+    .imageBox {
+      height: 180px;
+      width: 180px;
+      overflow: hidden;
+    }
+    .companyContent {
+      margin-left: 20px;
+      flex: 1;
+      .companyName {
+        height: 70px;
+        .companyTitle {
+          vertical-align: text-top;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .bottomBar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 130px;
+    width: 100vw;
+    border-top: #e3e3e3 solid 1px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 30px;
+    .bottomBarLeft {
+      flex: 1;
+      height: 100%;
+      font-size: 54px;
+      display: flex;
+      flex-direction: row-reverse;
+      box-sizing: border-box;
+      padding-right: 40px;
+      .star {
+        width: 150px;
+        line-height: 140px;
+        text-align: center;
+      }
+    }
+    .bottomBarRight {
+      width: 200px;
+    }
+  }
+}

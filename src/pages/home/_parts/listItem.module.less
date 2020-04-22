@@ -1,0 +1,80 @@
+._layout {
+  height: 260px;
+  box-sizing: border-box;
+  padding: 30px 20px;
+  .topBox {
+    height: 140px;
+    display: flex;
+    border-bottom: slategray solid 1px;
+    .imgBox {
+      width: 120px;
+      height: 120px;
+      overflow: hidden;
+      margin-right: 25px;
+      border: #e2e2e2 solid 1px;
+    }
+    .contentBox {
+      flex: 1;
+      height: 140px;
+      .contentTop {
+        position: relative;
+        .contentText {
+          display: inline-block;
+          position: relative;
+          top: 5px;
+          width: 65%;
+          font-size: 42px;
+          font-weight: 500;
+          line-height: 50px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow:ellipsis;
+        }
+        .contentTime {
+          position: absolute;
+          top: 8px;
+          right: 17px;
+          display: inline-block;
+          width: 40%;
+          font-size: 28px;
+          text-align: right;
+          color: rgb(143, 143, 143);
+        }
+      }
+      .contentBottom {
+        position: relative;
+        .companyName {
+          font-size: 30px;
+          display: inline-block;
+          line-height: 80px;
+          height: 60px;
+          overflow: hidden;
+          display: inline-block;
+          width: 60%;
+          color: rgb(43, 43, 43);
+        }
+        .wages {
+          font-size: 40px;
+          position: absolute;
+          top: 8px;
+          right: 17px;
+          display: inline-block;
+          width: 40%;
+          text-align: right;
+          color: rgb(92, 92, 92);
+        }
+      }
+    }
+  }
+  .bottomBox {
+    height: 80px;
+    padding: 15px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+  }
+  &:hover {
+    transition: all .5s ease-in-out;
+    background-color: rgb(243, 243, 243);
+  }
+}
