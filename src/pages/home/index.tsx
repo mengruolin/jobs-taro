@@ -2,12 +2,9 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 
-//import { AtList, AtListItem } from 'taro-ui'
 import ListItem from './_parts/listItem'
 
 import { connect } from '@tarojs/redux'
-
-import { add, minus, asyncAdd } from '../../actions/counter'
 
 import styles from './index.module.less'
 
@@ -26,48 +23,33 @@ import http from '../../service/api'
 // #endregion
 
 type PageStateProps = {
-  counter: {
-    num: number
+  global_reducer: {
+    city: string
+    job: string
   }
 }
 
-type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
-}
+type PageDispatchProps = {}
 
 type PageOwnProps = {}
 
-type PageState = {}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface IState {
+type PageState = {
   jobList: any[]  //职位列表
   page: number  //页码
   hasNextPage: boolean  //是否是最后一页
 }
 
-interface Index {
-  props: IProps
-  state: IState
-}
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-@connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  }
+// interface Index {
+//   props: IProps
+// }
+
+@connect(({ global_reducer }) => ({
+  global_reducer
 }))
-class Index extends Component {
+
+class Index extends Component<IProps, PageState> {
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -121,7 +103,7 @@ class Index extends Component {
   async requestJobList () {
     let res = await http.get(`/books?_page=${this.state.page}&_limit=20`)
     if (res.data[0]) {
-      this.setState((state: IState) => ({jobList: [...state.jobList, ...res.data], page: ++state.page}))
+      this.setState((state: PageState) => ({jobList: [...state.jobList, ...res.data], page: ++state.page}))
     } else {
       this.setState({hasNextPage: false})
     }
@@ -144,12 +126,20 @@ class Index extends Component {
   }
 
   render () {
+    const { city, job } = this.props.global_reducer
+
     return (
       <View className={styles._layout}>
         <View className={styles.header}>
           <View className={styles.header_top}>
-            <Text className={styles.header_title} onClick={() => this.handleChangeJobs()}>找工作啦！</Text>
-            <Text className={styles.header_title} onClick={() => {Taro.navigateTo({url: '/pages/cityList/index'})}}>[北京]</Text>
+            <Text 
+              className={styles.header_title} 
+              onClick={() => this.handleChangeJobs()}>
+              {job}</Text>
+            <Text 
+              className={styles.header_title}
+              onClick={() => {Taro.navigateTo({url: '/pages/cityList/index'})}}>
+                [{city}]</Text>
           </View>
           <View className={styles.search_box}>
             <View className={styles.search_input}>工作\t/公司\t/\t行业</View>

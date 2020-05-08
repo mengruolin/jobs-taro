@@ -1,10 +1,9 @@
 import { View } from '@tarojs/components'
 
 import styles from './Card.module.less'
-import { PropsWithChildren } from '@tarojs/taro'
 
 interface IProps {
-  children: PropsWithChildren<null>
+  children: ChildNode
 }
 
 export default function (props: IProps) {

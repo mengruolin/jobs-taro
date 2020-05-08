@@ -9,6 +9,8 @@ import 'taro-ui/dist/style/index.scss'
 
 import './app.less'
 
+import { set_userInfo } from './actions/global_actions'
+
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
 // if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
@@ -71,7 +73,16 @@ class App extends Component {
 
   componentDidMount () {}
 
-  componentDidShow () {}
+  async componentDidShow () {
+    try {
+      let res: any = await Taro.getUserInfo({})
+      if (res.errMsg === "getUserInfo:ok") {
+        store.dispatch(set_userInfo(res.userInfo))
+      }
+    } catch (error) {
+      
+    }
+  }
 
   componentDidHide () {}
 

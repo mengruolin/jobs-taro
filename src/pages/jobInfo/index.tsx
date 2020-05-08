@@ -1,15 +1,15 @@
 import { ComponentClass } from 'react'
-import Taro, { Component, Config, hideHomeButton } from '@tarojs/taro'
+import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
-import { AtIcon, AtAvatar, AtTag, AtButton } from 'taro-ui'
+import { AtTag, AtButton } from 'taro-ui'
 
 import { connect } from '@tarojs/redux'
-
-import { add, minus, asyncAdd } from '../../actions/counter'
 
 import styles from './index.module.less'
 
 import http from '../../service/api'
+
+import { set_job } from '../../actions/global_actions'
 
 // #region 书写注意
 //
@@ -22,46 +22,37 @@ import http from '../../service/api'
 // #endregion
 
 type PageStateProps = {
-  counter: {
-    num: number
+  global_reducer: {
+    job: string
   }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
+  setJob: (jobName: string) => void
 }
 
 type PageOwnProps = {}
 
-type PageState = {}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface IState {
+type PageState = {
   jobInfo: any
 }
 
-interface Index {
-  props: IProps
-  state: IState
-}
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-@connect(({ counter }) => ({
-  counter
+// interface Index {
+//   props: IProps
+//   state: IState
+// }
+
+@connect(({ global_reducer }) => ({
+  global_reducer
 }), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
+  setJob (jobName) {
+    dispatch(set_job(jobName))
   }
 }))
-class Index extends Component {
+
+class Index extends Component<IProps, PageState> {
 
   /**
    * 指定config的类型声明为: Taro.Config

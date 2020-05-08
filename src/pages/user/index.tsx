@@ -1,11 +1,19 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import { AtAvatar, AtList, AtListItem } from 'taro-ui'
+import { View, Text, Button } from '@tarojs/components'
+import {
+  AtAvatar,
+  AtList,
+  AtListItem,
+  AtModal,
+  AtModalHeader,
+  AtModalContent,
+  AtModalAction,
+  AtButton } from 'taro-ui'
 
 import { connect } from '@tarojs/redux'
 
-import { add, minus, asyncAdd } from '../../actions/counter'
+import { set_userInfo } from '../../actions/global_actions'
 
 import styles from './index.module.less'
 
@@ -20,41 +28,36 @@ import styles from './index.module.less'
 // #endregion
 
 type PageStateProps = {
-  counter: {
-    num: number
+  global_reducer: {
+    userInfo: any
   }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
+  setUserInfo: (userDate: object) => void
 }
 
 type PageOwnProps = {}
 
-type PageState = {}
+type PageState = {
+  loginModal: boolean
+}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Index {
-  props: IProps;
-}
+// interface Index {
+//   props: IProps;
+// }
 
-@connect(({ counter }) => ({
-  counter
+@connect(({ global_reducer }) => ({
+  global_reducer
 }), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
+  setUserInfo (userDate) {
+    dispatch(set_userInfo(userDate))
   }
 }))
-class Index extends Component {
+
+class Index extends Component<IProps, PageState> {
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -67,6 +70,13 @@ class Index extends Component {
     navigationBarTitleText: '用户中心'
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      loginModal: false
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
   }
@@ -77,13 +87,45 @@ class Index extends Component {
 
   componentDidHide () { }
 
+  async showLoginModal() {
+    this.setState({
+      loginModal: true
+    })
+  }
+
+  handleGetUserInfo (info) {
+    if (info.detail.errMsg === "getUserInfo:ok") {
+      this.setState({
+        loginModal: false,
+      })
+      this.props.setUserInfo(info.detail.userInfo)
+    }
+  }
+
+  async handleSingOut() {
+    let res = await Taro.getWeRunData({})
+
+    console.log(res);
+    
+    this.props.setUserInfo({})
+  }
+
   render () {
+    const { loginModal } = this.state
+    const { userInfo } = this.props.global_reducer
+
     return (
       <View className={styles._layout}>
         <View className={styles.header}>
-          <AtAvatar size='large' circle text='未登录' />
+          <AtAvatar image={userInfo.avatarUrl} size='large' circle text='未登录' />
           <View className={styles.userInfo}>
-            <Text>未登录</Text>
+            {
+              !userInfo.nickName ?
+              <Text onClick={this.showLoginModal.bind(this)}>未登录,点击登录</Text>
+              :
+              <Text>{userInfo.nickName}</Text>
+            }
+            
           </View>
         </View>
         <View className={styles.userMenu}>
@@ -94,7 +136,21 @@ class Index extends Component {
             <AtListItem title='意见反馈' iconInfo={{ value: 'message' }} arrow='right' />
             <AtListItem title='隐私设置' iconInfo={{ value: 'lock' }} arrow='right' />
           </AtList>
+          <View className={styles.logOut}>
+          {
+            userInfo.nickName && <Text onClick={this.handleSingOut.bind(this)}>退出登录</Text>
+          }
+          </View>
         </View>
+        <AtModal isOpened={loginModal}>
+          <AtModalHeader>用户登录</AtModalHeader>
+          <AtModalContent>
+          <Button 
+            openType='getUserInfo'
+            onGetUserInfo={this.handleGetUserInfo}>微信登录</Button>
+          </AtModalContent>
+          <AtModalAction><Button>取消</Button></AtModalAction>
+        </AtModal>
       </View>
     )
   }

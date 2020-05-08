@@ -6,24 +6,22 @@ import { AtTabs, AtTabsPane, AtTag } from 'taro-ui'
 
 import { connect } from '@tarojs/redux'
 
-import { add, minus, asyncAdd } from '../../actions/counter'
-
 import styles from './index.module.less'
 
 import http from '../../service/api'
 
 import Card from './_parts/Card'
 
+import { set_job } from '../../actions/global_actions'
+
 type PageStateProps = {
-  counter: {
-    num: number
+  global_reducer: {
+    job: string
   }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
+  setJob: (jobName: string) => void
 }
 
 type PageOwnProps = {}
@@ -43,19 +41,14 @@ interface Index {
   state: IPstate
 }
 
-@connect(({ counter }) => ({
-  counter
+@connect(({ global_reducer }) => ({
+  global_reducer
 }), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
+  setJob (jobName) {
+    dispatch(set_job(jobName))
   }
 }))
+
 class Index extends Component {
 
   /**
@@ -118,6 +111,10 @@ class Index extends Component {
     }, () => {
       this.getJobsTags()
     })
+  }
+
+  handleClickCard (jobName) {
+    this.props.setJob(jobName)
   }
 
   render () {
