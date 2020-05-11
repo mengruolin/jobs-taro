@@ -1,7 +1,7 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
-import { AtTag, AtButton } from 'taro-ui'
+import { AtTag, AtButton, AtToast } from 'taro-ui'
 
 import { connect } from '@tarojs/redux'
 
@@ -35,6 +35,9 @@ type PageOwnProps = {}
 
 type PageState = {
   jobInfo: any
+  toastOpen: boolean
+  toastText: string
+  toastState: string
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -68,7 +71,10 @@ class Index extends Component<IProps, PageState> {
   constructor(props) {
     super(props)
     this.state = {
-      jobInfo: []
+      jobInfo: [],
+      toastOpen: false,
+      toastText: 'success',
+      toastState: 'success'
     }
   }
 
@@ -97,6 +103,20 @@ class Index extends Component<IProps, PageState> {
     }
   }
 
+  handleShowToast(isOpened: boolean, text: string, state: string) {
+    this.setState({
+      toastOpen: isOpened,
+      toastText: text,
+      toastState: state
+    })
+  }
+
+  handleSubmitApply() {
+    //to do apply
+    // if success
+    this.handleShowToast(true, '申请成功', 'success')
+  }
+
   render () {
     const { jobInfo } = this.state
 
@@ -104,11 +124,22 @@ class Index extends Component<IProps, PageState> {
       <View className={styles._layout}>
         <View className={styles.jobInfo}>
           <View className={styles.jobTitle}>
-            { jobInfo.jobName }
+            <Text className={styles.jobName}>{ jobInfo.jobName }</Text>
+            <Text className={styles.jobWages}>{jobInfo.wages}K - {jobInfo.wages * 2}K</Text>
           </View>
           <View className={styles.jobRequire}>
-            <Text>{`${jobInfo.education}/${jobInfo.experience}/${jobInfo.address}/${jobInfo.jobSate}`}</Text>
-            <Text className={styles.jobWages}>{jobInfo.wages}K - {jobInfo.wages * 2}K</Text>
+            <View className={styles.jobText}>
+              <View className={`at-icon at-icon-map-pin ${styles.iconText}`} />
+              {jobInfo.address}
+            </View>
+            <View className={styles.jobText}>
+              <View className={`at-icon at-icon-link ${styles.iconText}`} />
+              {jobInfo.experience}
+            </View>
+            <View className={styles.jobText}>
+              <View className={`at-icon at-icon-mail ${styles.iconText}`} />
+              {jobInfo.education}
+            </View>
           </View>
           <View className={styles.jobTags}>
             { jobInfo.jobTags && jobInfo.jobTags.map((item: any, k: number) => (
@@ -128,6 +159,7 @@ class Index extends Component<IProps, PageState> {
             <Text>{jobInfo.publishTime}</Text>
           </View>
         </View> */}
+        <View className={styles.jobDescribeTitle}>公司信息：</View>
         <View className={styles.companyInfo}>
           <View className={styles.imageBox}>
             <Image style={{width: '100%', height: '100%'}} src={jobInfo.companyInfo.companyLogo}></Image>
@@ -137,22 +169,37 @@ class Index extends Component<IProps, PageState> {
               <Text className={styles.companyTitle}>{jobInfo.companyInfo.companyName}</Text>
             </View>
             <View className={styles.companyScale}>
-              <Text>{jobInfo.companyInfo.companyScale}</Text>
-              <Text style={{marginLeft: '20px'}}>
+              <Text>{jobInfo.companyInfo.companyTag}&middot;</Text>
+              <Text>{jobInfo.companyInfo.companyScale}&middot;</Text>
+              <Text>
                 {`${jobInfo.companyInfo.crewSize} - ${jobInfo.companyInfo.crewSize * 2}人`}
               </Text>
             </View>
           </View>
         </View>
+        <View className={styles.jobDescribeTitle}>工作地址：</View>
+        <View className={styles.companyAddress}>
+          <Text>{jobInfo.companyInfo.companyAddress}&gt;</Text>
+        </View>
         <View className={styles.bottomBar}>
           <View className={styles.bottomBarLeft}>
+            <View className={styles.iconWidget}>
               <View className={`at-icon at-icon-star ${styles.star}`}></View>
+              <Text>收藏</Text>
+            </View>
+            <View className={styles.iconWidget}>
               <View className={`at-icon at-icon-share ${styles.star}`}></View>
+              <Text>分享</Text>
+            </View>
           </View>
           <View className={styles.bottomBarRight}>
-            <AtButton type='primary'>立即申请</AtButton>
+            <AtButton type='primary' onClick={this.handleSubmitApply.bind(this)}>立即申请</AtButton>
           </View>
         </View>
+        <AtToast 
+          isOpened={this.state.toastOpen}
+          text={this.state.toastText}
+          status={this.state.toastState} />
       </View>
     )
   }

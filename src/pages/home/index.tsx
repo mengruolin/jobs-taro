@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Picker } from '@tarojs/components'
 
 import ListItem from './_parts/listItem'
 
@@ -37,6 +37,14 @@ type PageState = {
   jobList: any[]  //职位列表
   page: number  //页码
   hasNextPage: boolean  //是否是最后一页
+  localAddress: string[]
+  localAddressIndex: number
+  wageRange: string[]
+  wageRangeIndex: number
+  education: string[]
+  educationIndex: number
+  experience: string[]
+  experienceIndex: number
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -71,6 +79,14 @@ class Index extends Component<IProps, PageState> {
       jobList: [],
       page: 0,
       hasNextPage: true,
+      localAddress: ['', '美国', '中国', '巴西', '日本'],
+      localAddressIndex: 0,
+      wageRange: [''],
+      wageRangeIndex: 0,
+      education: [],
+      educationIndex: 0,
+      experience: [],
+      experienceIndex: 0
     }
   }
 
@@ -101,11 +117,30 @@ class Index extends Component<IProps, PageState> {
    * 
    */
   async requestJobList () {
-    let res = await http.get(`/books?_page=${this.state.page}&_limit=20`)
+    let res = await http.get(`/jobs?_page=${this.state.page}&_limit=20`)
     if (res.data[0]) {
       this.setState((state: PageState) => ({jobList: [...state.jobList, ...res.data], page: ++state.page}))
     } else {
       this.setState({hasNextPage: false})
+    }
+  }
+
+    /**
+   * 
+   * 
+   */
+  async requestScreening () {
+    let res: any = await http.get(`/jobScreening?_city=${this.props.global_reducer.city}&_jobName=${this.props.global_reducer.job}`)
+    console.log(res);
+    
+    if (res.data) {
+      const { localAddress, wageRange, education, experience } = res.data
+      this.setState(() => ({
+        localAddress,
+        wageRange,
+        education,
+        experience
+      }))
     }
   }
 
@@ -114,7 +149,8 @@ class Index extends Component<IProps, PageState> {
    */
   restPage () {
     this.setState(() => ({jobList: [], page: 0, hasNextPage: true}), () => {
-      this.requestJobList ()
+      this.requestJobList()
+      this.requestScreening()
     })
   }
   
@@ -123,6 +159,48 @@ class Index extends Component<IProps, PageState> {
    */
   handleChangeJobs () {
     Taro.navigateTo({url: '/pages/jobItem/index'})
+  }
+
+  handleChangeLocalAddress = e => {
+    const index: number = e.detail.value
+    
+    this.setState({
+      localAddressIndex: index
+    })
+
+    //刷新页面
+
+  }
+  
+  handleChangeEducation = e => {
+    const index: number = e.detail.value
+    
+    this.setState({
+      educationIndex: index
+    })
+
+    //刷新页面
+  }
+
+  handleChangeExperience = e => {
+    const index: number = e.detail.value
+    
+    this.setState({
+      experienceIndex: index
+    })
+
+    //刷新页面
+  }
+
+  handleChangeWageRange = e => {
+    const index: number = e.detail.value
+    
+    this.setState({
+      wageRangeIndex: index
+    })
+
+    //刷新页面
+
   }
 
   render () {
@@ -137,13 +215,39 @@ class Index extends Component<IProps, PageState> {
               onClick={() => this.handleChangeJobs()}>
               {job}</Text>
             <Text 
-              className={styles.header_title}
+              className={styles.header_address}
               onClick={() => {Taro.navigateTo({url: '/pages/cityList/index'})}}>
                 [{city}]</Text>
           </View>
           <View className={styles.search_box}>
             <View className={styles.search_input}>工作\t/公司\t/\t行业</View>
           </View>
+        </View>
+        <View className={styles.screening}>
+          <Picker mode='selector'
+            value={this.state.localAddressIndex}
+            range={this.state.localAddress}
+            onChange={this.handleChangeLocalAddress}>
+            <View className={styles.screeningItem}>区域&#9207;</View>
+          </Picker>
+          <Picker mode='selector'
+            value={this.state.educationIndex}
+            range={this.state.education}
+            onChange={this.handleChangeEducation}>
+            <View className={styles.screeningItem}>学历&#9207;</View>
+          </Picker>
+          <Picker mode='selector'
+            value={this.state.experienceIndex}
+            range={this.state.experience}
+            onChange={this.handleChangeExperience}>
+            <View className={styles.screeningItem}>经验&#9207;</View>
+          </Picker>
+          <Picker mode='selector'
+            value={this.state.wageRangeIndex}
+            range={this.state.wageRange}
+            onChange={this.handleChangeWageRange}>
+            <View className={styles.screeningItem}>薪资&#9207;</View>
+          </Picker>
         </View>
         
         {this.state.jobList.map((item: any, key: number) =>

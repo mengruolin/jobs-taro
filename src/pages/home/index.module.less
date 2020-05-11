@@ -7,10 +7,25 @@
     overflow: hidden;
     .header_top {
       margin: 40px 40px;
+      display: flex;
       .header_title {
         color: #e2e2e2;
         font-size: 44px;
         font-weight: 800;
+        flex: 1;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .header_address {
+        width: 200px;
+        text-align: right;
+        color: #e2e2e2;
+        font-size: 44px;
+        font-weight: 800;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     .search_box {
@@ -26,6 +41,22 @@
         padding: 0 20px;
         background-color: seashell;
       }
+    }
+  }
+  @linHeight: 80px;
+  .screening {
+    position: sticky;
+    top: 0;
+    height: @linHeight;
+    background-color: #ffffff;
+    z-index: 3;
+    display: flex;
+    box-shadow: 1px 1px 1px #e2e2e2;
+    .screeningItem {
+      width: 25vw;
+      flex: 1;
+      text-align: center;
+      line-height: @linHeight;
     }
   }
 }

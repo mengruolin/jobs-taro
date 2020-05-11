@@ -30,7 +30,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      // 'pages/jobInfo/index',
+      //'pages/jobInfo/index',
       'pages/home/index',
       'pages/index/index',
       'pages/jobItem/index',

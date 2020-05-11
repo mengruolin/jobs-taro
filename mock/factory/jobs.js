@@ -84,6 +84,26 @@ const educations = [
   '研究生'
 ]
 
+const companyTag = [
+  '计算机软件',
+  '服务外包'
+]
+
+const jobDescribe = `岗位职责：
+1、持续关注Web开发技术的发展，掌握新技术的核心点，从中挑选适合我们自己的新技术；
+2、建立前端的技术标准和规范，推动开发、测试、部署等最佳实践并监督执行；
+3、负责PC Web、H5、小程序开发框架和工具的设计和维护；
+4、参与产品的功能开发，指导web开发工程师的开发工作，协助解决难点问题；
+5、定期开展Web开发工程师培训，促进团队成员的进步。
+技能要求：
+1、有至少三年以上前端开发经验，有前端架构设计经验；
+2、深入掌握JS语言, 以及ES6, 7特性. 对Typescript或Flow等静态化工具熟练掌握；
+3、对前端主流框架，包括Vue，React等有深刻理解；
+4、熟练掌握gulp，webpack，browserify等工具，并且对实现细节有研究;
+5、熟悉移动网络通信机制，对Socket通信，TCP/IP和HTTP有较深刻理解和经验；
+6、有服务端的开发经验，有Java, NodeJS的项目经验优先考虑；
+7、具有良好的沟通能力，有较强的独立工作能力和解决问题的能力。`
+
 // 工作列表
 const jobList = {
   id: '@increment',
@@ -100,14 +120,16 @@ const jobList = {
 const jobInfo = {
   id: '@increment',
   companyInfo: {
-    companyName: '@ctitle(5, 10)',
+    companyName: '@ctitle(15, 20)',
     'companyLogo|1': companyLogo,
     crewSize: '@integer(20, 200)',
     'companyScale|1': companyScales,
+    'companyTag|1': companyTag,
+    'companyAddress': '@county(true)',
   },
   'jobName|1': jobName,
   'jobTags': jobTags,
-  'jobDescribe': '@cparagraph(30, 40)',
+  'jobDescribe': jobDescribe, //'@cparagraph(30, 40)',
   isStart: '@boolean',
   isApply: '@boolean',
   publishr: '@ctitle(2, 3)',
@@ -120,11 +142,27 @@ const jobInfo = {
   'jobTags': jobTags,
 }
 
+const jobScreening = {
+  'localAddress': ((count = 10) => {
+    let res = []
+    for (let i = 0; i < count; i++)
+      res.push('@county()')
+
+    return Mock.mock(res)
+  })(),
+  'education': ['不限', '高中', '专科', '本科', '研究生', '博士'],
+  'experience': ['不限', '1 - 3年', '3 - 5年', '5年以上'],
+  'wageRange': ['不限', '1000 - 5000', '5000 - 10000', '10000 - 20000', '20000以上']
+}
+
+
+
 module.exports = {
   randomMulti: (number = 16) => {
     let res = [];
     for (let i = 0; i < number; i++) res.push(jobList);
     return Mock.mock(res);
   },
-  jobInfo: Mock.mock(jobInfo)
+  jobInfo: Mock.mock(jobInfo),
+  jobScreening: Mock.mock(jobScreening)
 };

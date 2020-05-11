@@ -2,7 +2,7 @@ var db = require("./db.js");
 
 // 添加自定义路由
 let routes = {
-  "/books?isbn=:isbn": "/books/1" // 参数中有isbn时，重定向到id为1的图书
+  "/jobs?isbn=:isbn": "/jobs/1" // 参数中有isbn时，重定向到id为1的图书
 };
 
 // 修改 db.js 中 "root-sub" 形式的路由为 "/root/sub"

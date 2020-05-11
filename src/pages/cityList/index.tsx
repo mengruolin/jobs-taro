@@ -4,11 +4,11 @@ import { View, Text } from '@tarojs/components'
 import { AtIndexes } from 'taro-ui'
 import { connect } from '@tarojs/redux'
 
-import { add, minus, asyncAdd } from '../../actions/counter'
-
 import styles from './index.module.less'
 
 import http from '../../service/api'
+
+import { set_city } from '../../actions/global_actions'
 
 // #region 书写注意
 //
@@ -21,48 +21,33 @@ import http from '../../service/api'
 // #endregion
 
 type PageStateProps = {
-  counter: {
-    num: number
+  global_reducer: {
+    city: string
   }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
+  setCity: (cityName: string) => void
 }
 
 type PageOwnProps = {}
 
-type PageState = {}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface IStates {
+type PageState = {
   cityList: []
   cityHot: []
 }
 
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Index {
-  props: IProps;
-  state: IStates
-}
-
-@connect(({ counter }) => ({
-  counter
+@connect(({ global_reducer }) => ({
+  global_reducer
 }), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
+  setCity (cityName) {
+    dispatch(set_city(cityName))
   }
 }))
-class Index extends Component {
+
+class Index extends Component<IProps, PageState> {
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -111,8 +96,9 @@ class Index extends Component {
     
   }
 
-  onClick (item) {
-    console.log(item)
+  handleChooseCity (cityName) {
+    this.props.setCity(cityName.name)
+    Taro.switchTab({url: '/pages/home/index'})
   }
 
   render () {
@@ -123,7 +109,7 @@ class Index extends Component {
           list={cityList}
           isVibrate={false}
           animation
-          onClick={this.onClick.bind(this)}
+          onClick={this.handleChooseCity.bind(this)}
           >
           <View className={styles.hotListBox}>
             <View className={styles.hotListTitle}>热门城市</View>

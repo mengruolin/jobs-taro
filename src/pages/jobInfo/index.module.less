@@ -8,6 +8,18 @@
     .jobTitle {
       font-size: 44px;
       font-weight: 800;
+      display: flex;
+      .jobName {
+        flex: 1;
+      }
+      .jobWages {
+        line-height: 60px;
+        width: 200px;
+        font-size: 30px;
+        text-align: right;
+        font-weight: 700;
+        color: #6190e8;
+      }
     }
     .jobRequire {
       position: relative;
@@ -16,12 +28,17 @@
       line-height: 50px;
       height: 50px;
       color: #303030;
-      .jobWages {
-        position: absolute;
-        right: 20px;
-        font-size: 44px;
-        font-weight: 500;
-        color: #000000;
+      display: flex;
+      .jobText{
+        margin-right: 30px;
+        .iconText {
+          width: 20px;
+          height: 20px;
+          margin-right: 15px;
+          position: relative;
+          top: -5px;
+          //line-height: 50px;
+        }
       }
     }
     .jobTags {
@@ -31,10 +48,6 @@
     .jobDescribe {
       position: relative;
       top: 30px;
-      .jobDescribeTitle {
-        font-size: 33px;
-        font-weight: 800;
-      }
       .jobDescribeContent {
         display: block;
         margin-top: 10px;
@@ -49,29 +62,32 @@
     }
   }
   .companyInfo {
-    position: relative;
-    top: 20px;
+    margin: 20px 0 30px 0;
     height: 200px;
-    border-top: #303030 solid 1px;
-    border-bottom: #303030 solid 1px;
+    border-top: #646464 solid 2px;
+    border-bottom: #646464 solid 2px;
     display: flex;
     align-items: center;
     .imageBox {
-      height: 180px;
-      width: 180px;
+      height: 160px;
+      width: 160px;
       overflow: hidden;
     }
     .companyContent {
-      margin-left: 20px;
+      margin-left: 30px;
       flex: 1;
       .companyName {
-        height: 70px;
+        //height: 70px;
         .companyTitle {
           vertical-align: text-top;
-          font-weight: 500;
+          font-weight: 600;
         }
       }
     }
+  }
+  .companyAddress {
+    margin-top: 25px;
+    font-weight: 500;
   }
   .bottomBar {
     position: fixed;
@@ -93,14 +109,25 @@
       flex-direction: row-reverse;
       box-sizing: border-box;
       padding-right: 40px;
-      .star {
-        width: 150px;
-        line-height: 140px;
+      .iconWidget {
+        display: flex;
+        flex-direction: column;
         text-align: center;
+        font-size: 30px;
+        .star {
+          width: 150px;
+          line-height: 80px;
+          text-align: center;
+          font-size: 50px;
+        }
       }
     }
     .bottomBarRight {
-      width: 200px;
+      width: 700px;
     }
+  }
+  .jobDescribeTitle {
+    font-size: 33px;
+    font-weight: 800;
   }
 }

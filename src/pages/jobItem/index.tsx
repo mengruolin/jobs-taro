@@ -1,8 +1,8 @@
-import { ComponentClass } from 'react'
+import { ComponentClass, Props } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
-import { AtTabs, AtTabsPane, AtTag } from 'taro-ui'
+import { AtTabs, AtTabsPane } from 'taro-ui'
 
 import { connect } from '@tarojs/redux'
 
@@ -26,20 +26,18 @@ type PageDispatchProps = {
 
 type PageOwnProps = {}
 
-type PageState = { }
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface IPstate {
+type PageState = {
   current: number
   industrys: []
   jobTags: []
 }
 
-interface Index {
-  props: IProps
-  state: IPstate
-}
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps
+
+// interface Index {
+//   props: IProps
+//   state: IPstate
+// }
 
 @connect(({ global_reducer }) => ({
   global_reducer
@@ -49,7 +47,7 @@ interface Index {
   }
 }))
 
-class Index extends Component {
+class Index extends Component<IProps, PageState> {
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -115,6 +113,7 @@ class Index extends Component {
 
   handleClickCard (jobName) {
     this.props.setJob(jobName)
+    Taro.switchTab({url: '/pages/home/index'})
   }
 
   render () {
@@ -133,9 +132,9 @@ class Index extends Component {
               <View className={styles.atTabsPane}>
                 {
                   jobTags.map((jobItem: any) => (
-                    <Card key={jobItem.id}>
-                      {jobItem.title}
-                    </Card>
+                      <Card key={jobItem.id} onClick={() => this.handleClickCard(jobItem.title)}>
+                        {jobItem.title}
+                      </Card>
                   ))
                 }
               </View>
